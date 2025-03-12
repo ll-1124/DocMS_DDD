@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Files
+namespace Domain.Documents.Files
 {
     public class FileVersions
     {
