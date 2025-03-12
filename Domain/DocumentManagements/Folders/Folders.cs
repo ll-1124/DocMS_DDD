@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Folders
+namespace Domain.Documents.Folders
 {
     public class Folders : AggregateRoot<FolderId>
     {
