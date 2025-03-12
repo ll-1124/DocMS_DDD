@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Common.ValueObjects
+namespace Domain.DocumentSharing.ShareRule
 {
-    public record FileId(Guid Value)
+    internal class ShareFileEvent
     {
-        public static FileId New() => new(Guid.NewGuid());
     }
 }

@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Documents.Files
 {
-    public class Files : AggregateRoot<FileId>
+    public class Files : AggregateRoot<Guid>
     {
 
         public string FileName { get; set; }
-        public FolderId ParentFolderId { get; set; }
+        public Guid ParentFolderId { get; set; }
 
         public DateTime CreatedAt { get; private set; }
         public DateTime LastModify { get; private set; }
@@ -21,17 +21,21 @@ namespace Domain.Documents.Files
 
         public IReadOnlyCollection<FileVersions> FileVersions => _fileVersions.AsReadOnly();
 
-        private Files(string fileName, FolderId folderId, DateTime createdAt, DateTime lastModify)
+        private Files()
+        {
+        }
+
+        private Files(string fileName, Guid parentFolderId, DateTime createdAt, DateTime lastModify)
         {
             FileName = fileName;
-            ParentFolderId = folderId;
+            ParentFolderId = parentFolderId;
             CreatedAt = createdAt;
             LastModify = lastModify;
         }
 
-        public static Files Create(string fileName, FolderId folderId, DateTime createdAt, DateTime lastModify)
+        public static Files Create(string fileName, Guid parentFolderId, DateTime createdAt, DateTime lastModify)
         {
-            return new Files(fileName, folderId, createdAt, lastModify);
+            return new Files(fileName, parentFolderId, createdAt, lastModify);
         }
 
         public void AddFileVersion(FileVersions fileVersions)
@@ -58,7 +62,7 @@ namespace Domain.Documents.Files
             LastModify = DateTime.Now;
         }
 
-        public void MoveToFolder(FolderId folderId)
+        public void MoveToFolder(Guid folderId)
         {
             ParentFolderId = folderId;
             LastModify = DateTime.Now;

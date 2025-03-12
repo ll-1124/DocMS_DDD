@@ -1,4 +1,5 @@
-﻿using SharedKernel;
+﻿using Microsoft.EntityFrameworkCore;
+using SharedKernel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,16 @@ using System.Threading.Tasks;
 
 namespace Domain.Common.ValueObjects
 {
+    [Owned]
     public record Metadata : ValueObject
     {
         public long Size { get; }
         public string ContentType { get; }
         
+        private Metadata()
+        {
+        }
+
         public Metadata(long size, string contentType)
         {
             Size = size;

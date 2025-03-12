@@ -11,7 +11,7 @@ namespace Domain.Documents.Files
     public class FileVersions
     {
         public Guid Id { get; private set; }
-        public FileId FileId { get; private set; }
+        public Guid FileId { get; private set; }
         public string Name { get; private set; }
         public string Path { get; private set; }
         public DateTime CreatedAt { get; private set; }
@@ -23,7 +23,11 @@ namespace Domain.Documents.Files
         public bool IsDeleted { get; private set; }
         public Metadata Metadata { get; private set; }
 
-        private FileVersions(FileId fileId, string name, string path, Metadata metadata, Guid createdBy)
+        private FileVersions()
+        {
+        }
+
+        public FileVersions(Guid fileId, string name, string path, Metadata metadata, Guid createdBy)
         {
             Id = Guid.NewGuid();
             FileId = fileId;
@@ -35,11 +39,6 @@ namespace Domain.Documents.Files
             CreatedBy = createdBy;
             UpdatedBy = createdBy;
             IsDeleted = false;
-        }
-
-        public static FileVersions Create(FileId fileId, string name, string path, Metadata metadata, Guid createdBy)
-        {
-            return new FileVersions(fileId, name, path, metadata, createdBy);
         }
     }
 }
