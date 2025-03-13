@@ -28,6 +28,8 @@ namespace Domain.Documents.Folders
         {
             FolderName = folderName;
             ParentFolderId = parentFolderId;
+            CreatedAt = DateTime.Now;
+            LastModify = DateTime.Now;
         }
 
         public static Folders Create(string folderName, Guid? parentFolderId)

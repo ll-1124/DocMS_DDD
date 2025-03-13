@@ -2,7 +2,9 @@
 using Domain.Common.ValueObjects;
 using Domain.Documents.Files;
 using Domain.Documents.Folders;
+using Domain.DocumentSharing.ShareRequest;
 using Domain.DocumentSharing.ShareRule;
+using Domain.UserManagements.User;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -33,6 +35,12 @@ namespace Infrastructure.Database
             modelBuilder.Entity<Folders>()
                 .Property(f => f.CreatedAt)
                 .HasDefaultValueSql("NOW()");
+
+            modelBuilder.Entity<Folders>()
+                .HasOne<Folders>()
+                .WithMany()
+                .HasForeignKey(f => f.ParentFolderId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Folders>()
                 .Property(f => f.LastModify)
@@ -82,6 +90,47 @@ namespace Infrastructure.Database
             modelBuilder.Entity<ShareRules>()
                 .Property(fv => fv.Expiration);
 
+            // Cấu hình ShareRules
+            modelBuilder.Entity<ShareRequests>()
+                .HasKey(s => s.Id);
+
+            modelBuilder.Entity<ShareRequests>()
+                .Property(s => s.ResourceId).IsRequired();
+
+            modelBuilder.Entity<ShareRequests>()
+                .HasOne<Users>()
+                .WithMany()
+                .HasForeignKey(f => f.Requester)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ShareRequests>()
+                .Property(s => s.RequestMessage)
+                .HasMaxLength(250); 
+
+            modelBuilder.Entity<ShareRequests>()
+                .Property(s => s.OwnerMessage)
+                .HasMaxLength(250);  
+
+            modelBuilder.Entity<ShareRequests>()
+                .Property(s => s.ResourceType)
+                .HasConversion<int>();
+
+            modelBuilder.Entity<ShareRequests>()
+                .Property(fv => fv.RequestScope)
+                .HasConversion<int>();
+
+            modelBuilder.Entity<ShareRequests>()
+                .Property(fv => fv.RequestShareType)
+                .HasConversion<int>();
+
+            modelBuilder.Entity<ShareRequests>()
+                .Property(fv => fv.Status)
+                .HasConversion<int>();
+
+            modelBuilder.Entity<ShareRequests>()
+                .Property(fv => fv.RequestAt)
+                .HasDefaultValueSql("NOW()");
+
             // Cấu hình FileVersions
             modelBuilder.Entity<FileVersions>()
                 .HasKey(fv => fv.Id);
@@ -89,6 +138,12 @@ namespace Infrastructure.Database
             modelBuilder.Entity<FileVersions>()
                 .Property(fv => fv.CreatedAt)
                 .HasDefaultValueSql("NOW()");
+
+            modelBuilder.Entity<FileVersions>()
+                .HasOne<Files>()
+                .WithMany()
+                .HasForeignKey(f => f.FileId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<FileVersions>()
                 .Property(fv => fv.UpdatedAt)

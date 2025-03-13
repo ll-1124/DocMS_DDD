@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250313114528_AddMoreEntity")]
+    partial class AddMoreEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,9 +180,6 @@ namespace Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_file_versions");
 
-                    b.HasIndex("FileId")
-                        .HasDatabaseName("ix_file_versions_file_id");
-
                     b.HasIndex("FilesId")
                         .HasDatabaseName("ix_file_versions_files_id");
 
@@ -254,9 +254,6 @@ namespace Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_folders");
 
-                    b.HasIndex("ParentFolderId")
-                        .HasDatabaseName("ix_folders_parent_folder_id");
-
                     b.ToTable("folders", (string)null);
                 });
 
@@ -285,13 +282,6 @@ namespace Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Domain.Documents.Files.FileVersions", b =>
                 {
-                    b.HasOne("Domain.Documents.Files.Files", null)
-                        .WithMany()
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_file_versions_files_file_id");
-
                     b.HasOne("Domain.Documents.Files.Files", null)
                         .WithMany("FileVersions")
                         .HasForeignKey("FilesId")
@@ -334,15 +324,6 @@ namespace Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_files_folders_parent_folder_id");
-                });
-
-            modelBuilder.Entity("Domain.Documents.Folders.Folders", b =>
-                {
-                    b.HasOne("Domain.Documents.Folders.Folders", null)
-                        .WithMany()
-                        .HasForeignKey("ParentFolderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("fk_folders_folders_parent_folder_id");
                 });
 
             modelBuilder.Entity("Domain.Documents.Files.Files", b =>
