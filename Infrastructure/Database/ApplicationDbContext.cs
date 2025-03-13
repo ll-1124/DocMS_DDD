@@ -61,12 +61,26 @@ namespace Infrastructure.Database
                 .HasKey(s => s.Id);
 
             modelBuilder.Entity<ShareRules>()
+                .Property(s => s.ResourceId).IsRequired();
+
+            modelBuilder.Entity<ShareRules>()
+               .Property(s => s.Value).IsRequired()
+               .HasMaxLength(50);
+
+            modelBuilder.Entity<ShareRules>()
                 .Property(s => s.Type)
                 .HasConversion<int>(); // Lưu enum dưới dạng int
 
             modelBuilder.Entity<ShareRules>()
                 .Property(s => s.Scope)
                 .HasConversion<int>(); // Lưu enum dưới dạng int
+
+            modelBuilder.Entity<ShareRules>()
+                .Property(s => s.ResourceType)
+                .HasConversion<int>(); // Lưu enum dưới dạng int
+
+            modelBuilder.Entity<ShareRules>()
+                .Property(fv => fv.Expiration);
 
             // Cấu hình FileVersions
             modelBuilder.Entity<FileVersions>()
@@ -85,7 +99,7 @@ namespace Infrastructure.Database
                 .OwnsOne(fv => fv.Metadata, metadata =>
                 {
                     metadata.Property(m => m.Size).IsRequired();
-                    metadata.Property(m => m.ContentType).IsRequired().HasMaxLength(255);
+                    metadata.Property(m => m.ContentType).IsRequired().HasMaxLength(50);
                 });
 
         }
