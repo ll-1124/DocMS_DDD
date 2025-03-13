@@ -25,6 +25,8 @@ namespace Application.DocumentManagements.Folders
 
             _context.Folders.Add(folder);
 
+            _context.SaveChangesAsync(cancellationToken);
+
             return Task.FromResult(folder.Id);
         }
     }
