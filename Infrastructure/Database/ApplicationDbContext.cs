@@ -1,9 +1,9 @@
 ﻿using Application.Abstractions.Data;
 using Domain.Common.ValueObjects;
-using Domain.Documents.Files;
-using Domain.Documents.Folders;
-using Domain.DocumentSharing.ShareRequest;
-using Domain.DocumentSharing.ShareRule;
+using Domain.DocumentManagements.Folders;
+using File = Domain.DocumentManagements.Files.File;
+using Domain.DocumentSharing.ShareRequests;
+using Domain.DocumentSharing.ShareRules;
 using Domain.UserManagements.User;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,33 +16,34 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+
 namespace Infrastructure.Database
 {
     public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher) : DbContext(options), IApplicationDbContext
     {
-        public DbSet<Files> Files { get ; set ; }
-        public DbSet<Folders> Folders { get ; set ; }
-        public DbSet<ShareRules> ShareRules { get ; set ; }
+        public DbSet<File> Files { get ; set ; }
+        public DbSet<Folder> Folders { get ; set ; }
+        public DbSet<ShareRule> ShareRules { get ; set ; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //base.OnModelCreating(modelBuilder);
 
             // Cấu hình Folder
-            modelBuilder.Entity<Folders>()
+            modelBuilder.Entity<Folder>()
                 .HasKey(f => f.Id);
 
-            modelBuilder.Entity<Folders>()
+            modelBuilder.Entity<Folder>()
                 .Property(f => f.CreatedAt)
                 .HasDefaultValueSql("NOW()");
 
-            modelBuilder.Entity<Folders>()
-                .HasOne<Folders>()
+            modelBuilder.Entity<Folder>()
+                .HasOne<Folder>()
                 .WithMany()
                 .HasForeignKey(f => f.ParentFolderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Folders>()
+            modelBuilder.Entity<Folder>()
                 .Property(f => f.LastModify)
                 .HasDefaultValueSql("NOW()");
 
@@ -59,75 +60,75 @@ namespace Infrastructure.Database
                 .HasDefaultValueSql("NOW()");
 
             modelBuilder.Entity<Files>()
-                .HasOne<Folders>()
+                .HasOne<Folder>()
                 .WithMany()
                 .HasForeignKey(f => f.ParentFolderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Cấu hình ShareRules
-            modelBuilder.Entity<ShareRules>()
+            modelBuilder.Entity<ShareRule>()
                 .HasKey(s => s.Id);
 
-            modelBuilder.Entity<ShareRules>()
+            modelBuilder.Entity<ShareRule>()
                 .Property(s => s.ResourceId).IsRequired();
 
-            modelBuilder.Entity<ShareRules>()
+            modelBuilder.Entity<ShareRule>()
                .Property(s => s.Value).IsRequired()
                .HasMaxLength(50);
 
-            modelBuilder.Entity<ShareRules>()
+            modelBuilder.Entity<ShareRule>()
                 .Property(s => s.Type)
                 .HasConversion<int>(); // Lưu enum dưới dạng int
 
-            modelBuilder.Entity<ShareRules>()
+            modelBuilder.Entity<ShareRule>()
                 .Property(s => s.Scope)
                 .HasConversion<int>(); // Lưu enum dưới dạng int
 
-            modelBuilder.Entity<ShareRules>()
+            modelBuilder.Entity<ShareRule>()
                 .Property(s => s.ResourceType)
                 .HasConversion<int>(); // Lưu enum dưới dạng int
 
-            modelBuilder.Entity<ShareRules>()
+            modelBuilder.Entity<ShareRule>()
                 .Property(fv => fv.Expiration);
 
             // Cấu hình ShareRules
-            modelBuilder.Entity<ShareRequests>()
+            modelBuilder.Entity<ShareRequest>()
                 .HasKey(s => s.Id);
 
-            modelBuilder.Entity<ShareRequests>()
+            modelBuilder.Entity<ShareRequest>()
                 .Property(s => s.ResourceId).IsRequired();
 
-            modelBuilder.Entity<ShareRequests>()
-                .HasOne<Users>()
+            modelBuilder.Entity<ShareRequest>()
+                .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(f => f.Requester)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ShareRequests>()
+            modelBuilder.Entity<ShareRequest>()
                 .Property(s => s.RequestMessage)
                 .HasMaxLength(250); 
 
-            modelBuilder.Entity<ShareRequests>()
+            modelBuilder.Entity<ShareRequest>()
                 .Property(s => s.OwnerMessage)
                 .HasMaxLength(250);  
 
-            modelBuilder.Entity<ShareRequests>()
+            modelBuilder.Entity<ShareRequest>()
                 .Property(s => s.ResourceType)
                 .HasConversion<int>();
 
-            modelBuilder.Entity<ShareRequests>()
+            modelBuilder.Entity<ShareRequest>()
                 .Property(fv => fv.RequestScope)
                 .HasConversion<int>();
 
-            modelBuilder.Entity<ShareRequests>()
+            modelBuilder.Entity<ShareRequest>()
                 .Property(fv => fv.RequestShareType)
                 .HasConversion<int>();
 
-            modelBuilder.Entity<ShareRequests>()
+            modelBuilder.Entity<ShareRequest>()
                 .Property(fv => fv.Status)
                 .HasConversion<int>();
 
-            modelBuilder.Entity<ShareRequests>()
+            modelBuilder.Entity<ShareRequest>()
                 .Property(fv => fv.RequestAt)
                 .HasDefaultValueSql("NOW()");
 

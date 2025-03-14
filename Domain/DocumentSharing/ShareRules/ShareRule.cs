@@ -2,9 +2,9 @@
 using SharedKernel;
 using System.Security.Claims;
 
-namespace Domain.DocumentSharing.ShareRule
+namespace Domain.DocumentSharing.ShareRules
 {
-    public class ShareRules : Entity<Guid>, IShareRule
+    public class ShareRule : Entity<Guid>, IShareRule
     {
         public Guid ResourceId { get; private set; }
         public ResourceType ResourceType { get; private set; }
@@ -13,11 +13,11 @@ namespace Domain.DocumentSharing.ShareRule
         public string Value { get; private set; }
         public DateTime? Expiration {  get; private set; }
 
-        private ShareRules()
+        private ShareRule()
         {
         }
 
-        private ShareRules(Guid resourceId, ShareType type, AccessScope scope, string value, DateTime? expriration)
+        private ShareRule(Guid resourceId, ShareType type, AccessScope scope, string value, DateTime? expriration)
         {
             ResourceId = resourceId;
             Type = type;
@@ -26,9 +26,9 @@ namespace Domain.DocumentSharing.ShareRule
             Expiration = expriration;
         }
 
-        public static ShareRules Create(Guid resourceId, ShareType type, AccessScope scope, string value, DateTime? expriration)
+        public static ShareRule Create(Guid resourceId, ShareType type, AccessScope scope, string value, DateTime? expriration)
         {
-            return new ShareRules(resourceId, type, scope, value, expriration);
+            return new ShareRule(resourceId, type, scope, value, expriration);
         }
 
         public void Update(ShareType type, AccessScope scope, string value, DateTime? expriration)

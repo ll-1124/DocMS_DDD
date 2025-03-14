@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Documents.Folders
+namespace Domain.DocumentManagements.Folders
 {
-    public class Folders : AggregateRoot<Guid>
+    public class Folder : AggregateRoot<Guid>
     {
         public string FolderName { get; set; }
         public Guid? ParentFolderId { get; set; }
@@ -20,11 +20,11 @@ namespace Domain.Documents.Folders
 
         public IReadOnlyCollection<Guid> SubFolderIds => _subFolderIds.ToList().AsReadOnly();
 
-        private Folders()
+        private Folder()
         {
         }
 
-        private Folders(string folderName, Guid? parentFolderId)
+        private Folder(string folderName, Guid? parentFolderId)
         {
             FolderName = folderName;
             ParentFolderId = parentFolderId;
@@ -32,9 +32,9 @@ namespace Domain.Documents.Folders
             LastModify = DateTime.Now;
         }
 
-        public static Folders Create(string folderName, Guid? parentFolderId)
+        public static Folder Create(string folderName, Guid? parentFolderId)
         {
-            return new Folders(folderName, parentFolderId);
+            return new Folder(folderName, parentFolderId);
         }
 
         public void AddSubFolder(Guid folderId)

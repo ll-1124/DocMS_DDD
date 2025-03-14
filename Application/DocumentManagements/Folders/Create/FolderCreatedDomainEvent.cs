@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.DocumentSharing.ShareRule
+namespace Application.DocumentManagements.Folders.Create
 {
-    internal class ShareFileEvent
+    internal class FolderCreatedDomainEvent
     {
     }
 }

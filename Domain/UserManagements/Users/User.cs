@@ -1,11 +1,14 @@
-﻿using MediatR;
+﻿using SharedKernel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Abstractions
+namespace Domain.UserManagements.Users
 {
-    public interface IQuery<TResponse> : IRequest<TResponse> { }
+    public class User : Entity<Guid>
+    {
+
+    }
 }

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Documents.Files
+namespace Domain.DocumentManagements.Files
 {
-    public class Files : AggregateRoot<Guid>
+    public class File : AggregateRoot<Guid>
     {
 
         public string FileName { get; set; }
@@ -17,15 +17,15 @@ namespace Domain.Documents.Files
         public DateTime CreatedAt { get; private set; }
         public DateTime LastModify { get; private set; }
 
-        private readonly List<FileVersions> _fileVersions = new List<FileVersions>();
+        private readonly List<FileVersion> _FileVersion = new List<FileVersion>();
 
-        public IReadOnlyCollection<FileVersions> FileVersions => _fileVersions.AsReadOnly();
+        public IReadOnlyCollection<FileVersion> FileVersion => _FileVersion.AsReadOnly();
 
-        private Files()
+        private File()
         {
         }
 
-        private Files(string fileName, Guid parentFolderId, DateTime createdAt, DateTime lastModify)
+        private File(string fileName, Guid parentFolderId, DateTime createdAt, DateTime lastModify)
         {
             FileName = fileName;
             ParentFolderId = parentFolderId;
@@ -33,26 +33,26 @@ namespace Domain.Documents.Files
             LastModify = lastModify;
         }
 
-        public static Files Create(string fileName, Guid parentFolderId, DateTime createdAt, DateTime lastModify)
+        public static File Create(string fileName, Guid parentFolderId, DateTime createdAt, DateTime lastModify)
         {
-            return new Files(fileName, parentFolderId, createdAt, lastModify);
+            return new File(fileName, parentFolderId, createdAt, lastModify);
         }
 
-        public void AddFileVersion(FileVersions fileVersions)
+        public void AddFileVersion(FileVersion FileVersion)
         {
-            _fileVersions.Add(fileVersions);
+            _FileVersion.Add(FileVersion);
             LastModify = DateTime.Now;
         }
 
-        public void RemoveFileVersion(FileVersions fileVersions)
+        public void RemoveFileVersion(FileVersion FileVersion)
         {
-            _fileVersions.Remove(fileVersions);
+            _FileVersion.Remove(FileVersion);
             LastModify = DateTime.Now;
         }
 
-        public void ClearFileVersions()
+        public void ClearFileVersion()
         {
-            _fileVersions.Clear();
+            _FileVersion.Clear();
             LastModify = DateTime.Now;
         }
 

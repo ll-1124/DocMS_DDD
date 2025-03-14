@@ -1,14 +1,12 @@
-﻿using SharedKernel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.UserManagements.User
+namespace Domain.DocumentSharing.ShareRules
 {
-    public class Users : Entity<Guid>
+    internal class ShareFileEvent
     {
-
     }
 }

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Documents.Files
+namespace Domain.DocumentManagements.Files
 {
-    public class FileVersions
+    public class FileVersion
     {
         public Guid Id { get; private set; }
         public Guid FileId { get; private set; }
@@ -23,11 +23,11 @@ namespace Domain.Documents.Files
         public bool IsDeleted { get; private set; }
         public Metadata Metadata { get; private set; }
 
-        private FileVersions()
+        private FileVersion()
         {
         }
 
-        public FileVersions(Guid fileId, string name, string path, Metadata metadata, Guid createdBy)
+        public FileVersion(Guid fileId, string name, string path, Metadata metadata, Guid createdBy)
         {
             Id = Guid.NewGuid();
             FileId = fileId;

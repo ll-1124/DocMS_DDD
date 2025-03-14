@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.DocumentSharing.ShareRequest
+namespace Domain.DocumentSharing.ShareRequests
 {
-    public class ShareRequests : Entity<Guid>
+    public class ShareRequest : Entity<Guid>
     {
         public Guid ResourceId { get; private set; }
         public Guid Requester { get; private set; }
@@ -20,7 +20,7 @@ namespace Domain.DocumentSharing.ShareRequest
         public ShareType RequestShareType { get; private set; }
         public ShareRequestStatus Status { get; private set; }
 
-        private ShareRequests()
+        private ShareRequest()
         {
         }
 
